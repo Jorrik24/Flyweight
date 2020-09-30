@@ -2,15 +2,15 @@ import java.util.*;
 import java.awt.*;
 
 public class CircleFactory {
-    private static final HashMap<Color, Circle> circlesByColor = new HashMap<Color, Circle>();
+    public static final HashMap<Color, CircleColor> circlesByColor = new HashMap<Color, CircleColor>();
 
-    public static Circle getCircle(Color color) {
-        Circle circle = (Circle)circlesByColor.get(color);
+    public static CircleColor getColor(Color color) {
+        CircleColor circleColor = circlesByColor.get(color);
 
-        if(circle == null) {
-            circle = new Circle(color);
-            circlesByColor.put(color, circle);
+        if(circleColor == null) {
+            circleColor = new CircleColor(color);
+            circlesByColor.put(color, circleColor);
         }
-        return circle;
+        return circleColor;
     }
 }

@@ -8,7 +8,11 @@ public class View extends JFrame {
     int width = 800;
     int height = 600;
 
-    Color[] circleColors = {Color.CYAN, Color.GREEN, Color.MAGENTA, Color.ORANGE, Color.RED, Color.YELLOW, Color.PINK};
+    Color[] circleColors = {Color.CYAN, Color.GREEN, Color.MAGENTA, Color.ORANGE, Color.RED, Color.YELLOW, Color.PINK, Color.BLACK, Color.BLACK};
+
+    public static void main(String[] args) {
+        new View();
+    }
 
     public View() {
         this.setSize(width, height);
@@ -23,79 +27,45 @@ public class View extends JFrame {
         JPanel infoPane = new JPanel();
         contentPane.setLayout(new BorderLayout());
 
-        JButton normalDrawButton = new JButton("Normal");
         JButton flyweightDrawButton = new JButton("Flyweight");
-        JButton clearButton = new JButton("Clear");
-
-        JLabel normalLabel = new JLabel("0");
-        JLabel flyweightLabel = new JLabel("0");
 
         contentPane.add(drawingPanel, BorderLayout.CENTER);
-        infoPane.add(normalLabel, BorderLayout.WEST);
-        infoPane.add(normalDrawButton, BorderLayout.WEST);
-        infoPane.add(clearButton, BorderLayout.CENTER);
         infoPane.add(flyweightDrawButton, BorderLayout.EAST);
-        infoPane.add(flyweightLabel, BorderLayout.EAST);
         contentPane.add(infoPane, BorderLayout.SOUTH);
-
-        this.add(contentPane);
-        this.setVisible(true);
-
-        normalDrawButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-                Graphics g = drawingPanel.getGraphics();
-                long startTime = System.currentTimeMillis();
-
-                for (int i = 0; i < 50000; i++) {
-                    g.setColor(getRandomColor());
-                    g.fillOval(getRandomX(), getRandomY(), getRandomX(), getRandomY());
-                }
-
-                long stopTime = System.currentTimeMillis();
-                normalLabel.setText(Long.toString(stopTime - startTime));
-
-            }
-        });
 
         flyweightDrawButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
 
                 Graphics g = drawingPanel.getGraphics();
-                long startTime = System.currentTimeMillis();
 
-                for (int i = 0; i < 50000; i++) {
-                    Circle circle = CircleFactory.getCircle(getRandomColor());
-                    circle.draw(g, getRandomX(), getRandomY(), getRandomX(), getRandomY());
+                for (int i = 0; i < 100000; i++) {
+                    CircleColor color = CircleFactory.getColor(getRandomColor());
+                    Circle circle = new Circle(color, getRandomX(), getRandomY(), getRandomX(), getRandomY());
+                    circle.draw(g);
                 }
 
-                long stopTime = System.currentTimeMillis();
-                flyweightLabel.setText(Long.toString(stopTime - startTime));
-
+                printHashmap();
             }
         });
 
+        this.add(contentPane);
+        this.setVisible(true);
+    }
 
-        clearButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                drawingPanel.removeAll();
-                drawingPanel.repaint();
-            }
+    private void printHashmap() {
+        CircleFactory.circlesByColor.entrySet().forEach(color -> {
+            System.out.println(color.getValue().color);
         });
     }
 
     private Color getRandomColor(){
         Random randomGenerator = new Random();
-        int randInt = randomGenerator.nextInt(7);
+        int randInt = randomGenerator.nextInt(9);
         return circleColors[randInt];
     }
     private int getRandomX(){ return (int)(Math.random()*width); }
     private int getRandomY(){ return (int)(Math.random()*width); }
 
-    public static void main(String[] args) {
-        new View();
-    }
+
 }
