@@ -40,7 +40,7 @@ public class View extends JFrame {
                 Graphics g = drawingPanel.getGraphics();
 
                 for (int i = 0; i < 100000; i++) {
-                    CircleColor color = CircleFactory.getColor(getRandomColor());
+                    CircleColor color = CircleColorFactory.getCircleColor(getRandomColor());
                     Circle circle = new Circle(color, getRandomX(), getRandomY(), getRandomX(), getRandomY());
                     circle.draw(g);
                 }
@@ -54,7 +54,7 @@ public class View extends JFrame {
     }
 
     private void printHashmap() {
-        CircleFactory.circlesByColor.entrySet().forEach(color -> {
+        CircleColorFactory.circlesByColor.entrySet().forEach(color -> {
             System.out.println(color.getValue().color);
         });
     }
